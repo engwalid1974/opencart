@@ -262,6 +262,7 @@ class ControllerExtensionPaymentAmazonLoginPay extends Controller {
 			$order_data['lastname'] = $this->session->data['guest']['lastname'];
 			$order_data['email'] = $this->session->data['guest']['email'];
 			$order_data['telephone'] = $this->session->data['guest']['telephone'];
+			$order_data['custom_field'] = array();
 		}
 
 		if (isset($this->session->data['coupon'])) {

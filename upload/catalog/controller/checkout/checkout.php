@@ -133,6 +133,7 @@ class ControllerCheckoutCheckout extends Controller {
 		foreach ($custom_fields as $custom_field) {
 			$json[] = array(
 				'custom_field_id' => $custom_field['custom_field_id'],
+				'sort_order'      => $custom_field['sort_order'],
 				'required'        => $custom_field['required']
 			);
 		}

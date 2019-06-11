@@ -133,7 +133,7 @@ class ControllerExtensionPaymentPilibaba extends Controller {
 				$order_data['lastname'] = '';
 				$order_data['email'] = '';
 				$order_data['telephone'] = '';
-				$order_data['custom_field'] = null;
+				$order_data['custom_field'] = array();
 
 				$order_data['payment_firstname'] = '';
 				$order_data['payment_lastname'] = '';

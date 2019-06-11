@@ -1,11 +1,61 @@
 <?php
 class ModelMarketingAffiliate extends Model {
 	public function addAffiliate($data) {
-		$this->db->query("INSERT INTO " . DB_PREFIX . "customer_affiliate SET customer_id = '" . (int)$data['customer_id'] . "', company = '" . $this->db->escape((string)$data['company']) . "', website = '" . $this->db->escape((string)$data['website']) . "', tracking = '" . $this->db->escape((string)$data['tracking']) . "', commission = '" . (float)$data['commission'] . "', tax = '" . $this->db->escape((string)$data['tax']) . "', payment = '" . $this->db->escape((string)$data['payment']) . "', cheque = '" . $this->db->escape((string)$data['cheque']) . "', paypal = '" . $this->db->escape((string)$data['paypal']) . "', bank_name = '" . $this->db->escape((string)$data['bank_name']) . "', bank_branch_number = '" . $this->db->escape((string)$data['bank_branch_number']) . "', bank_swift_code = '" . $this->db->escape((string)$data['bank_swift_code']) . "', bank_account_name = '" . $this->db->escape((string)$data['bank_account_name']) . "', bank_account_number = '" . $this->db->escape((string)$data['bank_account_number']) . "', custom_field = '" . $this->db->escape(isset($data['custom_field']) ? json_encode($data['custom_field']) : json_encode(array())) . "', status = '" . (int)$data['status'] . "', date_added = NOW()");
+		$affiliate_custom_field = array();
+
+		if (!empty($data['custom_field'])) {
+			$this->load->model('customer/customer');
+
+			$customer_info = $this->model_customer_customer->getCustomer($data['customer_id']);
+
+			$this->load->model('customer/custom_field');
+
+			$filter_data = array(
+				'filter_status'            => 1,
+				'filter_customer_group_id' => $customer_info['customer_group_id']
+			);
+
+			$custom_fields = $this->model_customer_custom_field->getCustomFields($filter_data);
+
+			foreach ($custom_fields as $custom_field) {
+				$custom_field_id = $custom_field['custom_field_id'];
+
+				if ($custom_field['location'] == 'affiliate' && !empty($data['custom_field'][$custom_field_id])) {
+					$affiliate_custom_field[$custom_field_id] = $data['custom_field'][$custom_field_id];
+				}
+			}
+		}
+
+		$this->db->query("INSERT INTO " . DB_PREFIX . "customer_affiliate SET customer_id = '" . (int)$data['customer_id'] . "', company = '" . $this->db->escape((string)$data['company']) . "', website = '" . $this->db->escape((string)$data['website']) . "', tracking = '" . $this->db->escape((string)$data['tracking']) . "', commission = '" . (float)$data['commission'] . "', tax = '" . $this->db->escape((string)$data['tax']) . "', payment = '" . $this->db->escape((string)$data['payment']) . "', cheque = '" . $this->db->escape((string)$data['cheque']) . "', paypal = '" . $this->db->escape((string)$data['paypal']) . "', bank_name = '" . $this->db->escape((string)$data['bank_name']) . "', bank_branch_number = '" . $this->db->escape((string)$data['bank_branch_number']) . "', bank_swift_code = '" . $this->db->escape((string)$data['bank_swift_code']) . "', bank_account_name = '" . $this->db->escape((string)$data['bank_account_name']) . "', bank_account_number = '" . $this->db->escape((string)$data['bank_account_number']) . "', custom_field = '" . $this->db->escape(json_encode($affiliate_custom_field)) . "', status = '" . (int)$data['status'] . "', date_added = NOW()");
 	}
 
 	public function editAffiliate($customer_id, $data) {
-		$this->db->query("UPDATE " . DB_PREFIX . "customer_affiliate SET company = '" . $this->db->escape((string)$data['company']) . "', website = '" . $this->db->escape((string)$data['website']) . "', tracking = '" . $this->db->escape((string)$data['tracking']) . "', commission = '" . (float)$data['commission'] . "', tax = '" . $this->db->escape((string)$data['tax']) . "', payment = '" . $this->db->escape((string)$data['payment']) . "', cheque = '" . $this->db->escape((string)$data['cheque']) . "', paypal = '" . $this->db->escape((string)$data['paypal']) . "', bank_name = '" . $this->db->escape((string)$data['bank_name']) . "', bank_branch_number = '" . $this->db->escape((string)$data['bank_branch_number']) . "', bank_swift_code = '" . $this->db->escape((string)$data['bank_swift_code']) . "', bank_account_name = '" . $this->db->escape((string)$data['bank_account_name']) . "', bank_account_number = '" . $this->db->escape((string)$data['bank_account_number']) . "', status = '" . (int)$data['status'] . "' WHERE customer_id = '" . (int)$customer_id . "'");
+		$affiliate_custom_field = array();
+
+		if (!empty($data['custom_field'])) {
+			$this->load->model('customer/customer');
+
+			$customer_info = $this->model_customer_customer->getCustomer($customer_id);
+
+			$this->load->model('customer/custom_field');
+
+			$filter_data = array(
+				'filter_status'            => 1,
+				'filter_customer_group_id' => $customer_info['customer_group_id']
+			);
+
+			$custom_fields = $this->model_customer_custom_field->getCustomFields($filter_data);
+
+			foreach ($custom_fields as $custom_field) {
+				$custom_field_id = $custom_field['custom_field_id'];
+
+				if ($custom_field['location'] == 'affiliate' && !empty($data['custom_field'][$custom_field_id])) {
+					$affiliate_custom_field[$custom_field_id] = $data['custom_field'][$custom_field_id];
+				}
+			}
+		}
+
+		$this->db->query("UPDATE " . DB_PREFIX . "customer_affiliate SET company = '" . $this->db->escape((string)$data['company']) . "', website = '" . $this->db->escape((string)$data['website']) . "', tracking = '" . $this->db->escape((string)$data['tracking']) . "', commission = '" . (float)$data['commission'] . "', tax = '" . $this->db->escape((string)$data['tax']) . "', payment = '" . $this->db->escape((string)$data['payment']) . "', cheque = '" . $this->db->escape((string)$data['cheque']) . "', paypal = '" . $this->db->escape((string)$data['paypal']) . "', bank_name = '" . $this->db->escape((string)$data['bank_name']) . "', bank_branch_number = '" . $this->db->escape((string)$data['bank_branch_number']) . "', bank_swift_code = '" . $this->db->escape((string)$data['bank_swift_code']) . "', bank_account_name = '" . $this->db->escape((string)$data['bank_account_name']) . "', bank_account_number = '" . $this->db->escape((string)$data['bank_account_number']) . "', custom_field = '" . $this->db->escape(json_encode($affiliate_custom_field)) . "', status = '" . (int)$data['status'] . "' WHERE customer_id = '" . (int)$customer_id . "'");
 	}
 
 	public function deleteAffiliate($customer_id) {

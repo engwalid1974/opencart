@@ -47,18 +47,6 @@
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="input-company" class="col-sm-2 col-form-label">{{ entry_company }}</label>
-                  <div class="col-sm-10">
-                    <input type="text" name="company" value="{{ company }}" placeholder="{{ entry_company }}" id="input-company" class="form-control"/>
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="input-website" class="col-sm-2 col-form-label">{{ entry_website }}</label>
-                  <div class="col-sm-10">
-                    <input type="text" name="website" value="{{ website }}" placeholder="{{ entry_website }}" id="input-website" class="form-control"/>
-                  </div>
-                </div>
-                <div class="form-group row">
                   <label for="input-tracking" class="col-sm-2 col-form-label">{{ entry_tracking }}</label>
                   <div class="col-sm-10">
                     <input type="text" name="tracking" value="{{ tracking }}" placeholder="{{ entry_tracking }}" id="input-tracking" class="form-control"/>
@@ -75,10 +63,23 @@
                     <small class="form-text text-muted">{{ help_commission }}</small>
                   </div>
                 </div>
+                <div class="custom-field-area">
+                <div class="form-group row">
+                  <label for="input-company" class="col-sm-2 col-form-label">{{ entry_company }}</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="company" value="{{ company }}" placeholder="{{ entry_company }}" id="input-company" class="form-control"/>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="input-website" class="col-sm-2 col-form-label">{{ entry_website }}</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="website" value="{{ website }}" placeholder="{{ entry_website }}" id="input-website" class="form-control"/>
+                  </div>
+                </div>
                 {% for custom_field in custom_fields %}
                   {% if custom_field.location == 'affiliate' %}
                     {% if custom_field.type == 'select' %}
-                      <div class="form-group row custom-field custom-field{{ custom_field.custom_field_id }}" data-sort="{{ custom_field.sort_order }}">
+                      <div class="form-group row custom-field custom-field{{ custom_field.custom_field_id }}">
                         <label for="input-custom-field{{ custom_field.custom_field_id }}" class="col-sm-2 col-form-label">{{ custom_field.name }}</label>
                         <div class="col-sm-10">
                           <select name="custom_field[{{ custom_field.custom_field_id }}]" id="input-custom-field{{ custom_field.custom_field_id }}" class="form-control">
@@ -97,7 +98,7 @@
                       </div>
                     {% endif %}
                     {% if custom_field.type == 'radio' %}
-                      <div class="form-group row custom-field custom-field{{ custom_field.custom_field_id }}" data-sort="{{ custom_field.sort_order }}">
+                      <div class="form-group row custom-field custom-field{{ custom_field.custom_field_id }}">
                         <label class="col-sm-2 col-form-label">{{ custom_field.name }}</label>
                         <div class="col-sm-10">
                           <div>{% for custom_field_value in custom_field.custom_field_value %}
@@ -118,7 +119,7 @@
                       </div>
                     {% endif %}
                     {% if custom_field.type == 'checkbox' %}
-                      <div class="form-group row custom-field custom-field{{ custom_field.custom_field_id }}" data-sort="{{ custom_field.sort_order }}">
+                      <div class="form-group row custom-field custom-field{{ custom_field.custom_field_id }}">
                         <label class="col-sm-2 col-form-label">{{ custom_field.name }}</label>
                         <div class="col-sm-10">
                           <div>
@@ -140,7 +141,7 @@
                       </div>
                     {% endif %}
                     {% if custom_field.type == 'text' %}
-                      <div class="form-group row custom-field custom-field{{ custom_field.custom_field_id }}" data-sort="{{ custom_field.sort_order }}">
+                      <div class="form-group row custom-field custom-field{{ custom_field.custom_field_id }}">
                         <label for="input-custom-field{{ custom_field.custom_field_id }}" class="col-sm-2 col-form-label">{{ custom_field.name }}</label>
                         <div class="col-sm-10">
                           <input type="text" name="custom_field[{{ custom_field.custom_field_id }}]" value="{{ affiliate_custom_field[custom_field.custom_field_id] ? affiliate_custom_field[custom_field.custom_field_id] : custom_field.value }}" placeholder="{{ custom_field.name }}" id="input-custom-field{{ custom_field.custom_field_id }}" class="form-control"/>
@@ -150,7 +151,7 @@
                       </div>
                     {% endif %}
                     {% if custom_field.type == 'textarea' %}
-                      <div class="form-group row custom-field custom-field{{ custom_field.custom_field_id }}" data-sort="{{ custom_field.sort_order }}">
+                      <div class="form-group row custom-field custom-field{{ custom_field.custom_field_id }}">
                         <label for="input-custom-field{{ custom_field.custom_field_id }}" class="col-sm-2 col-form-label">{{ custom_field.name }}</label>
                         <div class="col-sm-10">
                           <textarea name="custom_field[{{ custom_field.custom_field_id }}]" rows="5" placeholder="{{ custom_field.name }}" id="input-custom-field{{ custom_field.custom_field_id }}" class="form-control">{{ affiliate_custom_field[custom_field.custom_field_id] ? affiliate_custom_field[custom_field.custom_field_id] : custom_field.value }}</textarea>
@@ -160,7 +161,7 @@
                       </div>
                     {% endif %}
                     {% if custom_field.type == 'file' %}
-                      <div class="form-group row custom-field custom-field{{ custom_field.custom_field_id }}" data-sort="{{ custom_field.sort_order }}">
+                      <div class="form-group row custom-field custom-field{{ custom_field.custom_field_id }}">
                         <label class="col-sm-2 col-form-label">{{ custom_field.name }}</label>
                         <div class="col-sm-10">
                           <button type="button" id="button-custom-field{{ custom_field.custom_field_id }}" data-loading-text="{{ text_loading }}" class="btn btn-light"><i class="fas fa-upload"></i> {{ button_upload }}</button>
@@ -172,7 +173,7 @@
                       </div>
                     {% endif %}
                     {% if custom_field.type == 'date' %}
-                      <div class="form-group row custom-field custom-field{{ custom_field.custom_field_id }}" data-sort="{{ custom_field.sort_order }}">
+                      <div class="form-group row custom-field custom-field{{ custom_field.custom_field_id }}">
                         <label for="input-custom-field{{ custom_field.custom_field_id }}" class="col-sm-2 col-form-label">{{ custom_field.name }}</label>
                         <div class="col-sm-10">
                           <div class="input-group date">
@@ -188,7 +189,7 @@
                       </div>
                     {% endif %}
                     {% if custom_field.type == 'time' %}
-                      <div class="form-group row custom-field custom-field{{ custom_field.custom_field_id }}" data-sort="{{ custom_field.sort_order }}">
+                      <div class="form-group row custom-field custom-field{{ custom_field.custom_field_id }}">
                         <label for="input-custom-field{{ custom_field.custom_field_id }}" class="col-sm-2 col-form-label">{{ custom_field.name }}</label>
                         <div class="col-sm-10">
                           <div class="input-group time">
@@ -204,7 +205,7 @@
                       </div>
                     {% endif %}
                     {% if custom_field.type == 'datetime' %}
-                      <div class="form-group row custom-field custom-field{{ custom_field.custom_field_id }}" data-sort="{{ custom_field.sort_order }}">
+                      <div class="form-group row custom-field custom-field{{ custom_field.custom_field_id }}">
                         <label for="input-custom-field{{ custom_field.custom_field_id }}" class="col-sm-2 col-form-label">{{ custom_field.name }}</label>
                         <div class="col-sm-10">
                           <div class="input-group datetime">
@@ -221,6 +222,7 @@
                     {% endif %}
                   {% endif %}
                 {% endfor %}
+                </div>
               </fieldset>
               <fieldset>
                 <legend>{{ text_payment }}</legend>
@@ -413,27 +415,20 @@ $('input[name=\'customer\']').autocomplete({
 //--></script>
 <script type="text/javascript"><!--
 $('input[name=\'customer_group_id\']').on('change', function() {
-	$.ajax({
-		url: 'index.php?route=customer/customer/customfield&user_token={{ user_token }}&customer_group_id=' + this.value,
-		dataType: 'json',
-		success: function(json) {
-			$('.custom-field').hide();
-			$('.custom-field').removeClass('required');
-
-			for (i = 0; i < json.length; i++) {
-				custom_field = json[i];
-
-				$('.custom-field' + custom_field['custom_field_id']).show();
-
-				if (custom_field['required']) {
-					$('.custom-field' + custom_field['custom_field_id']).addClass('required');
-				}
+	if (this.value == '') {
+		sort_custom_fields([]);
+	} else {
+		$.ajax({
+			url: 'index.php?route=customer/customer/customfield&user_token={{ user_token }}&customer_group_id=' + this.value,
+			dataType: 'json',
+			success: function(json) {
+				sort_custom_fields(json);
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 			}
-		},
-		error: function(xhr, ajaxOptions, thrownError) {
-			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-		}
-	});
+		});
+	}
 });
 
 $('input[name=\'customer_group_id\']').trigger('change');
@@ -607,20 +602,6 @@ $('.datetime').datetimepicker({
 	'format': 'YYYY-MM-DD HH:mm',
 	'locale': '{{ datepicker }}',
 	'allowInputToggle': true
-});
-
-$('#tab-general .form-group[data-sort]').detach().each(function() {
-	if ($(this).attr('data-sort') >= 0 && $(this).attr('data-sort') <= $('#tab-general .form-group').length) {
-		$('#tab-general .form-group').eq($(this).attr('data-sort')).before(this);
-	}
-
-	if ($(this).attr('data-sort') > $('#tab-general .form-group').length) {
-		$('#tab-general .form-group:last').after(this);
-	}
-
-	if ($(this).attr('data-sort') < -$('#tab-general .form-group').length) {
-		$('#tab-general .form-group:first').before(this);
-	}
 });
 //--></script>
 <script type="text/javascript"><!--

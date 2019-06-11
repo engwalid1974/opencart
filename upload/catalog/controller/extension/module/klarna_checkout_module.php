@@ -101,7 +101,7 @@ class ControllerExtensionModuleKlarnaCheckoutModule extends Controller {
 				'iso_code_2'	 => $country_info['iso_code_2'],
 				'iso_code_3'	 => $country_info['iso_code_3'],
 				'address_format' => '',
-				'custom_field'	 => null,
+				'custom_field'	 => array()
 			);
 		}
 

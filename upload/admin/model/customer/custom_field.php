@@ -17,7 +17,7 @@ class ModelCustomerCustomField extends Model {
 			}
 		}
 
-		if (isset($data['custom_field_value'])) {
+		if (isset($data['custom_field_value']) && ($data['type'] == 'select' || $data['type'] == 'radio' || $data['type'] == 'checkbox')) {
 			foreach ($data['custom_field_value'] as $custom_field_value) {
 				$this->db->query("INSERT INTO " . DB_PREFIX . "custom_field_value SET custom_field_id = '" . (int)$custom_field_id . "', sort_order = '" . (int)$custom_field_value['sort_order'] . "'");
 
@@ -54,7 +54,7 @@ class ModelCustomerCustomField extends Model {
 		$this->db->query("DELETE FROM " . DB_PREFIX . "custom_field_value WHERE custom_field_id = '" . (int)$custom_field_id . "'");
 		$this->db->query("DELETE FROM " . DB_PREFIX . "custom_field_value_description WHERE custom_field_id = '" . (int)$custom_field_id . "'");
 
-		if (isset($data['custom_field_value'])) {
+		if (isset($data['custom_field_value']) && ($data['type'] == 'select' || $data['type'] == 'radio' || $data['type'] == 'checkbox')) {
 			foreach ($data['custom_field_value'] as $custom_field_value) {
 				if ($custom_field_value['custom_field_value_id']) {
 					$this->db->query("INSERT INTO " . DB_PREFIX . "custom_field_value SET custom_field_value_id = '" . (int)$custom_field_value['custom_field_value_id'] . "', custom_field_id = '" . (int)$custom_field_id . "', sort_order = '" . (int)$custom_field_value['sort_order'] . "'");

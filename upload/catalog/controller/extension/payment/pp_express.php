@@ -1059,7 +1059,6 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 				$data['accept_language'] = '';
 			}
 
-			$this->load->model('account/custom_field');
 			$this->load->model('checkout/order');
 
 			$order_id = $this->model_checkout_order->addOrder($data);
