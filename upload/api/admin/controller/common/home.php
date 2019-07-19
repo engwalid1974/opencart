@@ -1,40 +1,14 @@
 <?php
 class ApiControllerCommonHome extends Controller {
 	public function index() {
-		// ToDo
-		echo "API - Admin - Home <br>";
+		$this->api_response->addOutput('home', 'API - Admin - Home');
 
-		/*
-		//-> test-1
-		$this->load->language('design/layout');
-		$success = $this->language->get('text_success');
-		echo $success . "<br>";
-		//<- test-1
-		*/
-
-		/*
-		//-> test-2
-		$test = $this->api_language->get('text_test');
-		echo $test . "<br>";
-		//<- test-2
-		*/
-
-		/*
-		//-> test-3
 		$this->load->model('catalog/product');
-		$products = $this->model_catalog_product->getProducts();
-		echo "<pre>";
-		print_r($products);
-		//<- test-3
-		*/
+		$product = $this->model_catalog_product->getProduct(40);
+		$this->api_response->addOutput('product (40)', $product);
 
-		/*
-		//-> test-4
 		$this->api_load->model('catalog/product');
-		$products = $this->api_model_catalog_product->getProducts();
-		echo "<pre>";
-		print_r($products);
-		//<- test-4
-		*/
+		$product = $this->api_model_catalog_product->getProduct(42);
+		$this->api_response->addOutput('product (42)', $product);
 	}
 }

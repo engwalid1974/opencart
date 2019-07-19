@@ -99,10 +99,12 @@ $registry->set('api_load', $api_loader);
 $registry->set('request', new Request());
 
 // Response
-$response = new Response();
-$response->addHeader('Content-Type: text/html; charset=utf-8');
-$response->setCompression($config->get('response_compression'));
-$registry->set('response', $response);
+$file = DIR_API_SYSTEM . 'library/response.php';
+include_once(modification($file));
+
+$api_response = new ApiResponse();
+$api_response->setCompression($config->get('response_compression'));
+$registry->set('api_response', $api_response);
 
 // Database
 if ($config->get('db_autostart')) {
@@ -148,4 +150,4 @@ if (defined('DIR_API_CATALOG')) {
 $api_route->dispatch(new ApiAction($config->get('action_router')), new ApiAction($config->get('action_error')));
 
 // Output
-$response->output();
+$api_response->output();

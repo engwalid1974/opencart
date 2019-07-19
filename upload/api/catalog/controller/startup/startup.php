@@ -15,7 +15,7 @@ class ApiControllerStartupStartup extends Controller {
 		// Language
 		$file = DIR_API_SYSTEM . 'library/language.php';
 
-		include_once($file);
+		include_once(modification($file));
 			
 		$code = $this->language->directory;
 
