@@ -17,7 +17,7 @@ $registry->set('log', $log);
 
 date_default_timezone_set($config->get('date_timezone'));
 
-set_error_handler(function($code, $message, $file, $line) use($log, $config) {
+set_error_handler(function($code, $message, $file, $line) use($log, $config, $registry) {
 	// error suppressed with @
 	if (error_reporting() === 0) {
 		return false;
@@ -41,16 +41,30 @@ set_error_handler(function($code, $message, $file, $line) use($log, $config) {
 			break;
 	}
 
+	$msg = '(API) - PHP ' . $error . ':  ' . $message . ' in ' . $file . ' on line ' . $line;
+
 	if ($config->get('error_log')) {
-		$log->write('PHP ' . $error . ':  ' . $message . ' in ' . $file . ' on line ' . $line);
+		$log->write($msg);
+	}
+
+	if ($config->get('error_display')) {
+		$registry->get('api_response')->addErrorToOutput($msg);
 	}
 
 	return true;
 });
 
-set_exception_handler(function($e) use ($log, $config) {
+set_exception_handler(function($e) use ($log, $config, $registry) {
+	$msg = '(API) - ' . get_class($e) . ':  ' . $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine();
+
 	if ($config->get('error_log')) {
-		$log->write(get_class($e) . ':  ' . $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine());
+		$log->write($msg);
+	}
+
+	if ($config->get('error_display')) {
+		$registry->get('api_response')->addErrorToOutput($msg);
+
+		$registry->get('api_response')->output();
 	}
 });
 

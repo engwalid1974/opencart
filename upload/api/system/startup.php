@@ -4,7 +4,15 @@ error_reporting(E_ALL);
 
 // Check Version
 if (version_compare(phpversion(), '7.0.0', '<')) {
-	exit('PHP7+ Required');
+	header('Content-Type: application/json', true);
+
+	$output = array(
+		'API_Version' => API_VERSION,
+		'error'       => 'PHP7+ Required'
+	);
+
+	echo json_encode($output);
+	exit;
 }
 
 if (!ini_get('date.timezone')) {

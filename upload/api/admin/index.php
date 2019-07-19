@@ -10,7 +10,15 @@ if (is_file('../../admin/config.php')) {
 
 // Check Installed
 if (!defined('DIR_APPLICATION')) {
-	exit('You are not authorized to view this page!');
+	header('Content-Type: application/json', true);
+
+	$output = array(
+		'API_Version' => API_VERSION,
+		'error'       => 'You are not authorized to view this page!'
+	);
+
+	echo json_encode($output);
+	exit;
 }
 
 define('DIR_API_APPLICATION', DIR_API . 'admin/');

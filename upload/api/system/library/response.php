@@ -14,6 +14,8 @@ class ApiResponse {
 	private $headers = array();
 	private $level = 0;
 	private $output = array();
+	private $error = array();
+	private $version = array('API_Version' => API_VERSION);
 
 	/**
 	 * 
@@ -39,12 +41,26 @@ class ApiResponse {
 	public function getOutput() {
 		return $this->output;
 	}
-	
+
+	/**
+	 * 
+ 	*/
+	public function getError() {
+		return $this->error;
+	}
+
 	/**
 	 * 
  	*/	
 	public function addOutput($key, $value) {
 		$this->output[$key] = $value;
+	}
+
+	/**
+	 * 
+ 	*/	
+	public function addErrorToOutput($error_message) {
+		$this->error['error'][] = $error_message;
 	}
 
 	/**
@@ -96,6 +112,8 @@ class ApiResponse {
 	 * 
  	*/
 	public function output() {
+		$this->output = array_merge($this->version, $this->error, $this->output);
+
 		if ($this->output) {
 			$output = $this->level ? $this->compress($this->output, $this->level) : $this->output;
 			
