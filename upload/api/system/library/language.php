@@ -10,9 +10,9 @@
 /**
 * Language class
 */
-class Language {
+class ApiLanguage {
 	private $default = 'en-gb';
-	public $directory;
+	private $directory;
 	public $data = array();
 	
 	/**
@@ -67,13 +67,13 @@ class Language {
 		if (!$key) {
 			$_ = array();
 	
-			$file = DIR_LANGUAGE . $this->default . '/' . $filename . '.php';
+			$file = DIR_API_LANGUAGE . $this->default . '/' . $filename . '.php';
 	
 			if (is_file($file)) {
 				require($file);
 			}
 	
-			$file = DIR_LANGUAGE . $this->directory . '/' . $filename . '.php';
+			$file = DIR_API_LANGUAGE . $this->directory . '/' . $filename . '.php';
 			
 			if (is_file($file)) {
 				require($file);
@@ -82,7 +82,7 @@ class Language {
 			$this->data = array_merge($this->data, $_);
 		} else {
 			// Put the language into a sub key
-			$this->data[$key] = new Language($this->directory);
+			$this->data[$key] = new ApiLanguage($this->directory);
 			$this->data[$key]->load($filename);
 		}
 		
