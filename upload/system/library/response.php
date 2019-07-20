@@ -25,6 +25,10 @@ class Response {
 		$this->headers[] = $header;
 	}
 	
+	public function getHeaders() {
+		return $this->headers;
+	}
+
 	/**
 	 * 
 	 *

@@ -48,7 +48,7 @@ set_error_handler(function($code, $message, $file, $line) use($log, $config, $re
 	}
 
 	if ($config->get('error_display')) {
-		$registry->get('api_response')->addErrorToOutput($msg);
+		$registry->get('api_response')->setError($msg);
 	}
 
 	return true;
@@ -62,7 +62,7 @@ set_exception_handler(function($e) use ($log, $config, $registry) {
 	}
 
 	if ($config->get('error_display')) {
-		$registry->get('api_response')->addErrorToOutput($msg);
+		$registry->get('api_response')->setError($msg);
 
 		$registry->get('api_response')->output();
 	}
@@ -113,10 +113,17 @@ $registry->set('api_load', $api_loader);
 $registry->set('request', new Request());
 
 // Response
+$response = new Response();
+$response->addHeader('Content-Type: text/html; charset=utf-8');
+$response->setCompression($config->get('response_compression'));
+$registry->set('response', $response);
+
+// API Response
 $file = DIR_API_SYSTEM . 'library/response.php';
 include_once(modification($file));
 
-$api_response = new ApiResponse();
+$api_response = new ApiResponse($registry);
+$response->addHeader('Content-Type: text/html; charset=utf-8');
 $api_response->setCompression($config->get('response_compression'));
 $registry->set('api_response', $api_response);
 

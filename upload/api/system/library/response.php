@@ -11,11 +11,19 @@
 * Response class
 */
 class ApiResponse {
+	protected $registry;
+
 	private $headers = array();
 	private $level = 0;
-	private $output = array();
+	private $output;
 	private $error = array();
-	private $version = array('API_Version' => API_VERSION);
+
+	/**
+	 * 
+ 	*/
+	public function __construct($registry) {
+		$this->registry = $registry;
+	}
 
 	/**
 	 * 
@@ -44,6 +52,15 @@ class ApiResponse {
 
 	/**
 	 * 
+	 *
+	 * @param	string	$output
+ 	*/	
+	public function setOutput($output) {
+		$this->output = $output;
+	}
+
+	/**
+	 * 
  	*/
 	public function getError() {
 		return $this->error;
@@ -52,15 +69,8 @@ class ApiResponse {
 	/**
 	 * 
  	*/	
-	public function addOutput($key, $value) {
-		$this->output[$key] = $value;
-	}
-
-	/**
-	 * 
- 	*/	
-	public function addErrorToOutput($error_message) {
-		$this->error['error'][] = $error_message;
+	public function setError($error_message) {
+		$this->error['errors'][] = $error_message;
 	}
 
 	/**
@@ -112,19 +122,38 @@ class ApiResponse {
 	 * 
  	*/
 	public function output() {
-		$this->output = array_merge($this->version, $this->error, $this->output);
+		if ($this->output) {
+			if (is_array($this->output)) {
+				$this->addHeader('Content-Type: application/json');
+				$this->output = array_merge($this->error, $this->output);
+				$this->error = array();
+				$this->output = json_encode($this->output);
+			}
+		} else {
+			$this->output = $this->registry->get('response')->getOutput();
+			$this->headers = $this->registry->get('response')->getHeaders();
+		}
+
+		if (!empty($this->error['errors'])) {
+			$error = '';
+
+			foreach ($this->error['errors'] as $value) {
+				$error = $error . $value . "<br>";
+			}
+
+			$this->output = $error . $this->output;
+		}
 
 		if ($this->output) {
 			$output = $this->level ? $this->compress($this->output, $this->level) : $this->output;
-			
+
 			if (!headers_sent()) {
 				foreach ($this->headers as $header) {
 					header($header, true);
 				}
 			}
 
-			header('Content-Type: application/json', true);
-			echo json_encode($output);
+			echo $output;
 		}
 	}
 }
