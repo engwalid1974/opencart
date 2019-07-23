@@ -8,8 +8,17 @@ class ApiControllerStartupStartup extends Controller {
 		);
 
 		foreach ($action_pre_action as $value) {
-			$action = new Action($value);
-			$action->execute($this->registry);
+			$pre_action = new Action($value);
+
+			$action = $pre_action->execute($this->registry);
+
+			if ($action instanceof Action) {
+				while ($action instanceof Action) {
+					$action = $action->execute($this->registry);
+				}
+
+				break;
+			}
 		}
 
 		// Language
