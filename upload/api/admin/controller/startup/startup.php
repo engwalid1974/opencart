@@ -19,8 +19,8 @@ class ApiControllerStartupStartup extends Controller {
 
 		$code = $this->language->directory;
 
-		$api_language = new ApiLanguage($code);
-		$api_language->load($code);
-		$this->registry->set('api_language', $api_language);
+		$language = new ApiLanguage($code);
+		$language->load($code);
+		$this->api->set('language', $language);
 	}
 }

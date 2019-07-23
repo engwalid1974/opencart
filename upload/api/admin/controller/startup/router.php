@@ -14,7 +14,7 @@ class ApiControllerStartupRouter extends Controller {
 		$route = preg_replace('/[^a-zA-Z0-9_\/]/', '', (string)$route);
 		
 		// Trigger the pre events
-		$result = $this->api_event->trigger('controller/' . $route . '/before', array(&$route, &$data));
+		$result = $this->api->event->trigger('controller/' . $route . '/before', array(&$route, &$data));
 		
 		if (!is_null($result)) {
 			return $result;
@@ -26,7 +26,7 @@ class ApiControllerStartupRouter extends Controller {
 		$output = $action->execute($this->registry, $data);
 		
 		// Trigger the post events
-		$result = $this->api_event->trigger('controller/' . $route . '/after', array(&$route, &$output));
+		$result = $this->api->event->trigger('controller/' . $route . '/after', array(&$route, &$output));
 		
 		if (!is_null($result)) {
 			return $result;

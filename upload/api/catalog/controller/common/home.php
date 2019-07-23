@@ -13,7 +13,7 @@ class ApiControllerCommonHome extends Controller {
 		$data['route'] = 'API-CATALOG, common/home';
 
 //-> Test-2
-		$data['test'] = $this->api_language->get('text_test');
+		$data['test'] = $this->api->language->get('text_test');
 
 		$filter_data = array(
 			'filter_category_id'  => 28
@@ -23,6 +23,6 @@ class ApiControllerCommonHome extends Controller {
 		$data['products'] = $this->model_catalog_product->getProducts($filter_data);;
 //<- Test-2
 
-		$this->api_response->setOutput($data);
+		$this->api->response->setOutput($data);
 	}
 }

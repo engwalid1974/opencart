@@ -7,8 +7,8 @@ class ApiControllerErrorNotFound extends Controller {
 		$data['route'] = 'API-ADMIN, error/not_found';
 
 		// ToDo
-		$this->api_response->setError('Bad request...');
+		$this->api->response->setError('Bad request...');
 
-		$this->api_response->setOutput($data);
+		$this->api->response->setOutput($data);
 	}
 }

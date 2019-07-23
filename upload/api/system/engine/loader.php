@@ -12,6 +12,7 @@
  */
 final class ApiLoader {
 	protected $registry;
+	protected $api;
 
 	/**
 	 * Constructor
@@ -20,6 +21,7 @@ final class ApiLoader {
 	 */
 	public function __construct($registry) {
 		$this->registry = $registry;
+		$this->api = $registry->get('api');
 	}
 
 	/**
@@ -41,7 +43,7 @@ final class ApiLoader {
 		$trigger = $route;
 
 		// Trigger the pre events
-		$result = $this->registry->get('api_event')->trigger('controller/' . $trigger . '/before', array(&$route, &$args));
+		$result = $this->api->event->trigger('controller/' . $trigger . '/before', array(&$route, &$args));
 
 		// Make sure its only the last event that returns an output if required.
 		if ($result != null && !$result instanceof Exception) {
@@ -52,7 +54,7 @@ final class ApiLoader {
 		}
 
 		// Trigger the post events
-		$result = $this->registry->get('api_event')->trigger('controller/' . $trigger . '/after', array(&$route, &$args, &$output));
+		$result = $this->api->event->trigger('controller/' . $trigger . '/after', array(&$route, &$args, &$output));
 
 		if ($result && !$result instanceof Exception) {
 			$output = $result;
@@ -72,7 +74,7 @@ final class ApiLoader {
 		// Sanitize the call
 		$route = preg_replace('/[^a-zA-Z0-9_\/]/', '', (string)$route);
 
-		if (!$this->registry->has('api_model_' . str_replace('/', '_', $route))) {
+		if (!$this->api->has('model_' . str_replace('/', '_', $route))) {
 			$file = DIR_API_APPLICATION . 'model/' . $route . '.php';
 			$class = 'ApiModel' . preg_replace('/[^a-zA-Z0-9]/', '', $route);
 
@@ -89,7 +91,7 @@ final class ApiLoader {
 					$proxy->attach($method, $function);
 				}
 
-				$this->registry->set('api_model_' . str_replace('/', '_', (string)$route), $proxy);
+				$this->api->set('model_' . str_replace('/', '_', (string)$route), $proxy);
 			} else {
 				throw new \Exception('Error: Could not load model ' . $route . '!');
 			}
@@ -111,15 +113,15 @@ final class ApiLoader {
 		// Keep the original trigger
 		$trigger = $route;
 
-		$result = $this->registry->get('api_event')->trigger('language/' . $trigger . '/before', array(&$route, &$key));
+		$result = $this->api->event->trigger('language/' . $trigger . '/before', array(&$route, &$key));
 
 		if ($result && !$result instanceof Exception) {
 			$output = $result;
 		} else {
-			$output = $this->registry->get('api_language')->load($route, $key);
+			$output = $this->api->language->load($route, $key);
 		}
 
-		$result = $this->registry->get('api_event')->trigger('language/' . $trigger . '/after', array(&$route, &$key, &$output));
+		$result = $this->api->event->trigger('language/' . $trigger . '/after', array(&$route, &$key, &$output));
 
 		if ($result && !$result instanceof Exception) {
 			$output = $result;
@@ -146,7 +148,7 @@ final class ApiLoader {
 			$trigger = $route;
 
 			// Trigger the pre events
-			$result = $this->registry->get('api_event')->trigger('model/' . $trigger . '/before', array(&$route, &$args));
+			$result = $this->api->event->trigger('model/' . $trigger . '/before', array(&$route, &$args));
 
 			if ($result && !$result instanceof Exception) {
 				$output = $result;
@@ -177,7 +179,7 @@ final class ApiLoader {
 			}
 
 			// Trigger the post events
-			$result = $this->registry->get('api_event')->trigger('model/' . $trigger . '/after', array(&$route, &$args, &$output));
+			$result = $this->api->event->trigger('model/' . $trigger . '/after', array(&$route, &$args, &$output));
 
 			if ($result && !$result instanceof Exception) {
 				$output = $result;

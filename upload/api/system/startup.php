@@ -116,6 +116,7 @@ require_once(modification(DIR_API_SYSTEM . 'engine/action.php'));
 require_once(modification(DIR_API_SYSTEM . 'engine/event.php'));
 require_once(modification(DIR_API_SYSTEM . 'engine/router.php'));
 require_once(modification(DIR_API_SYSTEM . 'engine/loader.php'));
+require_once(modification(DIR_API_SYSTEM . 'engine/registry.php'));
 
 // Helper
 require_once(DIR_SYSTEM . 'helper/general.php');

@@ -2,6 +2,9 @@
 // Registry
 $registry = new Registry();
 
+$api = new \ApiRegistry();
+$registry->set('api', $api);
+
 // Config
 $config = new Config();
 
@@ -48,7 +51,7 @@ set_error_handler(function($code, $message, $file, $line) use($log, $config, $re
 	}
 
 	if ($config->get('error_display')) {
-		$registry->get('api_response')->setError($msg);
+		$api->response->setError($msg);
 	}
 
 	return true;
@@ -62,9 +65,9 @@ set_exception_handler(function($e) use ($log, $config, $registry) {
 	}
 
 	if ($config->get('error_display')) {
-		$registry->get('api_response')->setError($msg);
+		$api->response->setError($msg);
 
-		$registry->get('api_response')->output();
+		$api->response->output();
 	}
 });
 
@@ -72,8 +75,7 @@ set_exception_handler(function($e) use ($log, $config, $registry) {
 $event = new \Event($registry);
 $registry->set('event', $event);
 
-$api_event = new \ApiEvent($registry);
-$registry->set('api_event', $api_event);
+$api->set('event', new \ApiEvent($registry));
 
 // Event Register
 if ($config->has('action_event')) {
@@ -88,7 +90,7 @@ if (defined('DIR_API_CATALOG')) {
 	if ($config->has('admin_action_event')) {
 		foreach ($config->get('admin_action_event') as $key => $value) {
 			foreach ($value as $priority => $action) {
-				$api_event->register($key, new ApiAction($action), $priority);
+				$api->event->register($key, new ApiAction($action), $priority);
 			}
 		}
 	}
@@ -96,7 +98,7 @@ if (defined('DIR_API_CATALOG')) {
 	if ($config->has('catalog_action_event')) {
 		foreach ($config->get('catalog_action_event') as $key => $value) {
 			foreach ($value as $priority => $action) {
-				$api_event->register($key, new ApiAction($action), $priority);
+				$api->event->register($key, new ApiAction($action), $priority);
 			}
 		}
 	}
@@ -106,8 +108,7 @@ if (defined('DIR_API_CATALOG')) {
 $loader = new Loader($registry);
 $registry->set('load', $loader);
 
-$api_loader = new ApiLoader($registry);
-$registry->set('api_load', $api_loader);
+$api->set('load', new ApiLoader($registry));
 
 // Request
 $registry->set('request', new Request());
@@ -122,10 +123,9 @@ $registry->set('response', $response);
 $file = DIR_API_SYSTEM . 'library/response.php';
 include_once(modification($file));
 
-$api_response = new ApiResponse($registry);
-$response->addHeader('Content-Type: text/html; charset=utf-8');
-$api_response->setCompression($config->get('response_compression'));
-$registry->set('api_response', $api_response);
+$api->set('response', new ApiResponse($registry));
+$api->response->addHeader('Content-Type: text/html; charset=utf-8');
+$api->response->setCompression($config->get('response_compression'));
 
 // Database
 if ($config->get('db_autostart')) {
@@ -150,25 +150,25 @@ $registry->set('url', new Url($config->get('site_url')));
 $registry->set('document', new Document());
 
 // Route
-$api_route = new ApiRouter($registry);
+$api->set('route', new ApiRouter($registry));
 
 // Pre Actions
 if (defined('DIR_API_CATALOG')) {
 	if ($config->has('admin_action_pre_action')) {
 		foreach ($config->get('admin_action_pre_action') as $value) {
-			$api_route->addPreAction(new ApiAction($value));
+			$api->route->addPreAction(new ApiAction($value));
 		}
 	}
 } else {
 	if ($config->has('catalog_action_pre_action')) {
 		foreach ($config->get('catalog_action_pre_action') as $value) {
-			$api_route->addPreAction(new ApiAction($value));
+			$api->route->addPreAction(new ApiAction($value));
 		}
 	}
 }
 
 // Dispatch
-$api_route->dispatch(new ApiAction($config->get('action_router')), new ApiAction($config->get('action_error')));
+$api->route->dispatch(new ApiAction($config->get('action_router')), new ApiAction($config->get('action_error')));
 
 // Output
-$api_response->output();
+$api->response->output();
