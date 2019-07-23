@@ -20,7 +20,7 @@ $registry->set('log', $log);
 
 date_default_timezone_set($config->get('date_timezone'));
 
-set_error_handler(function($code, $message, $file, $line) use($log, $config, $registry) {
+set_error_handler(function($code, $message, $file, $line) use($log, $config, $api) {
 	// error suppressed with @
 	if (error_reporting() === 0) {
 		return false;
@@ -57,7 +57,7 @@ set_error_handler(function($code, $message, $file, $line) use($log, $config, $re
 	return true;
 });
 
-set_exception_handler(function($e) use ($log, $config, $registry) {
+set_exception_handler(function($e) use ($log, $config, $api) {
 	$msg = '(API) - ' . get_class($e) . ':  ' . $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine();
 
 	if ($config->get('error_log')) {
